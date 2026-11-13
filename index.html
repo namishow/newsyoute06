@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本史探究 小テスト：飛鳥の朝廷と蘇我氏</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background: linear-gradient(135deg, #311042 0%, #581c87 45%, #831843 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+    </style>
+</head>
+<body class="text-gray-800 flex flex-col justify-between min-h-screen p-3 md:p-6">
+
+    <!-- Header -->
+    <header class="max-w-3xl mx-auto w-full text-center my-3">
+        <div class="inline-flex items-center gap-1.5 bg-amber-400 text-amber-950 text-xs font-extrabold px-3 py-1 rounded-full mb-2 shadow">
+            <i class="fa-solid fa-graduation-cap"></i> 高校日本史探究 プリントNo.06 完全網羅
+        </div>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-wide flex items-center justify-center gap-2">
+            <span>飛鳥の朝廷と蘇我氏</span>
+        </h1>
+        <p class="text-purple-200 text-xs md:text-sm mt-1">継体天皇・磐井の乱・蘇我氏と物部氏の抗争・推古朝（冠位十二階・憲法十七条・遣隋使）まで徹底攻略！</p>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-2xl mx-auto w-full flex-grow flex items-center justify-center">
+
+        <!-- START SCREEN -->
+        <div id="start-screen" class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl w-full text-center transition-all duration-300">
+            <div class="text-5xl text-purple-700 mb-3">
+                <i class="fa-solid fa-torii-gate"></i>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800 mb-2">日本史一問一答クイズ</h2>
+            <p class="text-gray-600 text-xs md:text-sm mb-5 leading-relaxed">
+                全16問の4択形式問題です。<br>
+                継体天皇の即位・任那四県割譲・筑紫国造磐井の乱・崇仏論争と物部守屋討滅・推古天皇と厩戸王（聖徳太子）・冠位十二階・憲法十七条・小野妹子や犬上御田鍬の遣隋使・『天皇記』『国記』までプリントNo.06の全内容を完全網羅！
+            </p>
+
+            <div class="bg-purple-50/90 rounded-2xl p-4 mb-6 text-left border border-purple-200">
+                <h3 class="font-bold text-purple-900 text-xs md:text-sm mb-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-star text-amber-500"></i> このクイズの特徴
+                </h3>
+                <ul class="text-xs text-purple-900 space-y-1.5">
+                    <li><i class="fa-solid fa-check text-green-600 mr-1"></i> 正解・不正解の効果音（BGM/SE）付き（ミュート切替可）</li>
+                    <li><i class="fa-solid fa-check text-green-600 mr-1"></i> <b>出題順・選択肢の正解位置は毎回完全ランダムシャッフル！</b></li>
+                    <li><i class="fa-solid fa-check text-green-600 mr-1"></i> 蘇我氏台頭・推古朝の国制改革（No.06）要点整理カード搭載</li>
+                </ul>
+            </div>
+
+            <button onclick="startQuiz()" class="pulse-animation w-full bg-gradient-to-r from-purple-700 to-pink-700 hover:from-purple-600 hover:to-pink-600 text-white font-black text-lg py-3.5 px-8 rounded-2xl shadow-lg hover:shadow-purple-500/40 transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-play"></i> テストを開始する！
+            </button>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div id="quiz-screen" class="glass-card rounded-3xl p-5 md:p-7 shadow-2xl w-full hidden transition-all duration-300">
+            <!-- Progress & Stats -->
+            <div class="flex justify-between items-center mb-3 pb-3 border-b border-gray-200">
+                <div class="flex items-center gap-2">
+                    <span id="question-number" class="bg-purple-700 text-white text-xs font-bold px-3 py-1 rounded-full">Q.1 / 16</span>
+                    <span id="combo-badge" class="hidden bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-bounce">
+                        <i class="fa-solid fa-fire"></i> <span id="combo-count">0</span> コンボ!
+                    </span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="sound-toggle-btn" onclick="toggleSound()" title="効果音オン/オフ" class="text-gray-500 hover:text-purple-700 text-sm px-2 py-1 rounded-lg bg-gray-100">
+                        <i id="sound-icon" class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <div class="text-sm font-bold text-gray-600">
+                        スコア: <span id="current-score" class="text-purple-700 font-black text-lg">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-5 overflow-hidden">
+                <div id="progress-bar" class="bg-purple-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Text -->
+            <div class="mb-5">
+                <span id="question-category" class="text-xs font-bold text-purple-700 tracking-wider uppercase">飛鳥の朝廷と蘇我氏 (No.06)</span>
+                <h3 id="question-text" class="text-base md:text-lg font-bold text-gray-800 mt-1 leading-snug">
+                    問題文がここに入ります。
+                </h3>
+            </div>
+
+            <!-- Options -->
+            <div id="options-container" class="space-y-2.5 mb-5">
+                <!-- Option buttons generated by JS -->
+            </div>
+
+            <!-- Feedback Area (Explanation) -->
+            <div id="explanation-card" class="hidden bg-slate-800 text-white rounded-2xl p-4 mb-4 border border-slate-700">
+                <div class="flex items-center gap-2 mb-1">
+                    <span id="result-icon" class="text-xl"></span>
+                    <h4 id="result-text" class="font-extrabold text-sm md:text-base">正解！</h4>
+                </div>
+                <p id="explanation-text" class="text-xs md:text-sm text-slate-300 leading-relaxed">
+                    解説文がここに入ります。
+                </p>
+            </div>
+
+            <!-- Next Button -->
+            <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-6 rounded-xl shadow transition-all flex items-center justify-center gap-2">
+                次へ進む <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl w-full text-center hidden transition-all duration-300">
+            <div id="result-badge" class="inline-block p-4 rounded-full bg-amber-100 text-amber-500 text-4xl mb-3 shadow-inner">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800 mb-1">テスト結果</h2>
+            <p id="result-rank" class="text-xs md:text-sm font-bold text-purple-700 mb-4">ランク判定中...</p>
+
+            <div class="bg-purple-50/90 rounded-2xl p-5 mb-5 border border-purple-100">
+                <div class="text-xs text-purple-700 font-bold uppercase tracking-wider mb-1">最終スコア</div>
+                <div class="text-4xl md:text-5xl font-black text-purple-950 mb-1">
+                    <span id="final-score">0</span> <span class="text-base font-normal text-purple-700">/ 100 点</span>
+                </div>
+                <p id="correct-count-text" class="text-xs text-purple-800">16問中 0問 正解</p>
+            </div>
+
+            <div id="result-comment" class="bg-white p-4 rounded-xl border border-gray-200 text-xs md:text-sm text-gray-700 mb-5 text-left leading-relaxed">
+                コメント
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2.5">
+                <button onclick="startQuiz()" class="flex-1 bg-purple-700 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-xl shadow transition-all flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-rotate-right"></i> もう一度挑戦
+                </button>
+                <button onclick="toggleMnemonicsModal()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-white font-bold py-3 px-4 rounded-xl shadow transition-all flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-lightbulb"></i> 飛鳥の朝廷と蘇我氏まとめ
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-3xl mx-auto w-full text-center mt-4 text-purple-200/80 text-xs">
+        高校日本史探究 授業プリントNo.06 対応クイズアプリ
+    </footer>
+
+    <!-- Mnemonics Modal (暗記ポイント) -->
+    <div id="mnemonics-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[85vh] overflow-y-auto">
+            <button onclick="toggleMnemonicsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-lg font-black text-gray-800 mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-key text-amber-500"></i> 飛鳥の朝廷と蘇我氏 要点まとめ
+            </h3>
+            <p class="text-xs text-gray-500 mb-4">プリントNo.06の超重要暗記セット</p>
+
+            <div class="space-y-2.5 text-xs text-gray-700">
+                <div class="p-3 bg-purple-50 rounded-xl border border-purple-200">
+                    <span class="font-bold text-purple-900 block mb-1">⚔️ 6世紀の動乱と蘇我氏の台頭</span>
+                    <ul class="list-disc list-inside space-y-1 text-purple-950">
+                        <li><b>継体天皇</b>：武烈天皇の死後に大伴金村らに擁立され即位。</li>
+                        <li><b>筑紫国造磐井の乱（527年）</b>：新羅と結び反乱 $\rightarrow$ <b>物部麁鹿火</b>が鎮圧。磐井の墓は福岡県<b>岩戸山古墳</b>（石人・石馬）。磐井の子は<b>糟屋屯倉</b>を献上。</li>
+                        <li><b>蘇我氏（大臣・財政／三蔵管理） vs 物部氏（大連・軍事）</b>：稲目 vs 尾輿の<b>崇仏論争</b> $\rightarrow$ 587年、<b>蘇我馬子</b>が<b>物部守屋</b>を討滅し崇峻天皇を擁立。のち馬子は崇峻天皇を暗殺し、初の女性天皇・<b>推古天皇</b>を擁立。</li>
+                    </ul>
+                </div>
+                <div class="p-3 bg-amber-50 rounded-xl border border-amber-200">
+                    <span class="font-bold text-amber-900 block mb-1">📜 推古朝の政治改革（推古天皇・厩戸王・蘇我馬子）</span>
+                    <ul class="list-disc list-inside space-y-1 text-amber-950">
+                        <li><b>冠位十二階（603年）</b>：<b>徳・仁・礼・信・義・智</b>の大小12階。氏姓の世襲制を打破し個人に授与。</li>
+                        <li><b>憲法十七条（604年）</b>：儒教・仏教・法家思想を融合した官人への訓戒（第1条「和を以て貴し」、第2条「篤く三宝を敬へ」、第3条「詔を承りては必ず謹め」、第12条「国に二の君なく」、第17条「独り断むべからず」）。</li>
+                        <li><b>歴史書の編纂（620年）</b>：厩戸王と蘇我馬子が<b>『天皇記』『国記』</b>などを編纂。</li>
+                    </ul>
+                </div>
+                <div class="p-3 bg-indigo-50 rounded-xl border border-indigo-200">
+                    <span class="font-bold text-indigo-900 block mb-1">🚢 遣隋使の派遣（対等外交の展開）</span>
+                    <ul class="list-disc list-inside space-y-1 text-indigo-950">
+                        <li><b>600年</b>：第1回遣隋使（『隋書』倭国伝に記載、姓は阿毎・字は多利思比孤・号は阿輩雞弥）。</li>
+                        <li><b>607年</b>：<b>小野妹子</b>派遣（通訳は鞍作福利）。「日出づる処の天子、書を日没する処の天子に致す」の国書に隋の<b>煬帝</b>が激怒。</li>
+                        <li><b>608年</b>：答礼使の<b>裴世清</b>が来日。小野妹子再渡航に<b>高向玄理・旻・南淵請安</b>らが留学生・学問僧として随行。</li>
+                        <li><b>614年</b>：<b>犬上御田鍬</b>派遣（最後の遣隋使であり、630年の最初の遣唐使でもある）。618年隋滅亡。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button onclick="toggleMnemonicsModal()" class="w-full mt-5 bg-slate-800 text-white font-bold py-2.5 rounded-xl text-sm">
+                閉じる
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Sound & Quiz Logic -->
+    <script>
+        // ==========================================
+        // Web Audio API Sound Effects (BGM/SE)
+        // ==========================================
+        class SoundManager {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+            }
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+            playTone(freq, type, startTime, duration, vol = 0.15) {
+                if (this.muted || !this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, startTime);
+
+                gain.gain.setValueAtTime(vol, startTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(startTime);
+                osc.stop(startTime + duration);
+            }
+            playCorrect() {
+                this.init();
+                if (this.muted) return;
+                const now = this.ctx.currentTime;
+                // 雅楽・和風風の明るいファンファーレ和音
+                this.playTone(587.33, 'triangle', now, 0.18, 0.22);        // D5
+                this.playTone(739.99, 'triangle', now + 0.08, 0.18, 0.22); // F#5
+                this.playTone(880.00, 'triangle', now + 0.16, 0.35, 0.25); // A5
+            }
+            playWrong() {
+                this.init();
+                if (this.muted) return;
+                const now = this.ctx.currentTime;
+                // 不正解ブザー音
+                this.playTone(196.00, 'sawtooth', now, 0.22, 0.18);        // G3
+                this.playTone(164.81, 'sawtooth', now + 0.18, 0.35, 0.18); // E3
+            }
+            playFinish() {
+                this.init();
+                if (this.muted) return;
+                const now = this.ctx.currentTime;
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((n, idx) => {
+                    this.playTone(n, 'triangle', now + idx * 0.11, 0.4, 0.22);
+                });
+            }
+        }
+
+        const sound = new SoundManager();
+
+        function toggleSound() {
+            sound.muted = !sound.muted;
+            const icon = document.getElementById('sound-icon');
+            if (sound.muted) {
+                icon.className = 'fa-solid fa-volume-xmark text-rose-500';
+            } else {
+                icon.className = 'fa-solid fa-volume-high text-purple-700';
+                sound.init();
+            }
+        }
+
+        // ==========================================
+        // Master Quiz Data (16 Questions - Sheet No.06)
+        // ==========================================
+        const rawQuizData = [
+            {
+                category: "1. 継体天皇の擁立と6世紀の東アジア (No.06)",
+                question: "武烈天皇が後継者なく没したあと、越前（または近江）から迎えられて大伴金村らに擁立された大王は誰か？また、その頃の中国・朝鮮情勢として正しい記述はどれか？",
+                correctAnswer: "継体天皇 ―― 高句麗・新羅が勢力を拡大して百済を圧迫していた",
+                dummyAnswers: [
+                    "雄略天皇 ―― 唐が朝鮮半島を完全に統一し、日本と百済が同盟を結んでいた",
+                    "欽明天皇 ―― 元（モンゴル帝国）が高句麗を滅ぼし、南宋を統一していた",
+                    "推古天皇 ―― 隋が滅亡して五代十国時代となり、新羅が百済に滅ぼされていた"
+                ],
+                explanation: "6世紀初め、武烈天皇に後継者がいなかったため、大伴金村らが応神天皇5世の孫とされる継体天皇を擁立しました。当時、朝鮮半島では高句麗と新羅が強大化して百済を圧迫しており、百済は日本との関係強化を求めました。"
+            },
+            {
+                category: "2. 任那四県割譲と大伴金村の失脚 (No.06)",
+                question: "512年に百済の要請に応じて「任那（加耶）四県」を百済に割譲したことをのちに批判され、失脚したヤマト政権の大連は誰か？",
+                correctAnswer: "大伴金村（おおとものかなむら）",
+                dummyAnswers: [
+                    "物部麁鹿火（もののべのあらかい）",
+                    "蘇我稲目（そがのいなめ）",
+                    "中臣鎌足（なかとみのかまたり）"
+                ],
+                explanation: "大連の大伴金村は512年に百済へ任那四県を割譲しましたが、その後も新羅の加耶進出を止められず、朝鮮半島における倭の勢力後退の責任を問われて失脚しました。"
+            },
+            {
+                category: "3. 筑紫国造磐井の乱 (No.06)",
+                question: "527年、朝鮮半島へ出兵しようとしたヤマト政権軍の進軍を阻み、新羅と結んで反乱を起こした九州北部の地方豪族と、これを鎮圧した人物の正しい組み合わせはどれか？",
+                correctAnswer: "反乱：筑紫国造磐井（いわい） ／ 鎮圧：物部麁鹿火（あらかい）",
+                dummyAnswers: [
+                    "反乱：吉備田狭（たさ） ／ 鎮圧：蘇我馬子（うまこ）",
+                    "反乱：物部守屋（もりや） ／ 鎮圧：大伴金村（かなむら）",
+                    "反乱：長屋王（ながやおう） ／ 鎮圧：藤原不比等（ふひと）"
+                ],
+                explanation: "527年の「磐井の乱」は、筑紫国造磐井が新羅と結んで起こした大規模な反乱で、大連の物部麁鹿火によって鎮圧されました。この反乱を契機にヤマト政権の九州支配は一段と強化されました。"
+            },
+            {
+                category: "4. 磐井の墳墓と屯倉の献上 (No.06)",
+                question: "磐井の乱ののち、磐井の子（葛子）が死罪を免れるために大王へ献上した直轄地（屯倉）と、石人・石馬が並べられた磐井の墓とされる福岡県八女市の前方後円墳の正しい組み合わせはどれか？",
+                correctAnswer: "糟屋（かすや）屯倉 ／ 岩戸山古墳（いわとやまこふん）",
+                dummyAnswers: [
+                    "児島（こじま）屯倉 ／ 造山古墳（つくりやまこふん）",
+                    "白猪（しらい）屯倉 ／ 江田船山古墳（えたふなやまこふん）",
+                    "難波（なにわ）屯倉 ／ 大仙陵古墳（だいせんりょうこふん）"
+                ],
+                explanation: "磐井の子の葛子は「糟屋屯倉」を大王に献上して許されました。また磐井の生前の墓とされる福岡県八女市の「岩戸山古墳」には、多くの石人・石馬が立て並べられていたことが『筑後国風土記』逸文にも記されています。"
+            },
+            {
+                category: "5. 6世紀の農村変化と群集墳 (No.06)",
+                question: "6世紀になると鉄製農具や乾田経営の普及によって有力農民層が台頭し、一定地域に小規模な円墳が多数密集して築かれるようになった。このような古墳群を何というか？",
+                correctAnswer: "群集墳（ぐんしゅうふん）",
+                dummyAnswers: [
+                    "装飾古墳（そうしょくこふん）",
+                    "終末期八角墳（しゅうまつきはっかくふん）",
+                    "四隅突出型墳丘墓（よすみとっしゅつがたぶんきゅうぼ）"
+                ],
+                explanation: "6世紀には生産力の向上によって台頭した有力農民層も古墳を築くようになり、横穴式石室を持つ小円墳が多数集まった「群集墳」が全国各地に出現しました。"
+            },
+            {
+                category: "6. 物部氏と蘇我氏の役割分担 (No.06)",
+                question: "大伴金村の失脚後、ヤマト政権の中央で対立した物部氏と蘇我氏の「姓（かばね）」と朝廷での主な担当職務の正しい組み合わせはどれか？",
+                correctAnswer: "物部氏：大連・軍事担当 ／ 蘇我氏：大臣・財政（三蔵管理）担当",
+                dummyAnswers: [
+                    "物部氏：大臣・財政担当 ／ 蘇我氏：大連・祭祀担当",
+                    "物部氏：国造・地方行政担当 ／ 蘇我氏：伴造・工芸技術担当",
+                    "物部氏：摂政・外交担当 ／ 蘇我氏：関白・司法担当"
+                ],
+                explanation: "物部氏（麁鹿火・尾輿・守屋）は「大連（おおむらじ）」として軍事を担当し、渡来人と結びついた蘇我氏（稲目・馬子）は「大臣（おおおみ）」として朝廷の財政（斎蔵・内蔵・大蔵の三蔵管理）を担当して急速に勢力を伸ばしました。"
+            },
+            {
+                category: "7. 崇仏論争と物部氏の滅亡 (No.06)",
+                question: "仏教受容をめぐる「崇仏論争」において、崇仏派の蘇我稲目と対立した排仏派の人物と、587年に蘇我馬子が滅ぼした物部氏の人物の正しい組み合わせはどれか？",
+                correctAnswer: "排仏派：物部尾輿（おこし） ／ 587年討滅：物部守屋（もりや）",
+                dummyAnswers: [
+                    "排仏派：物部守屋（もりや） ／ 587年討滅：物部麁鹿火（あらかい）",
+                    "排仏派：大伴金村（かなむら） ／ 587年討滅：中臣勝海（かつみ）",
+                    "排仏派：蘇我入鹿（いるか） ／ 587年討滅：蘇我蝦夷（えみし）"
+                ],
+                explanation: "欽明天皇の時代に蘇我稲目（崇仏派）と物部尾輿（排仏派）の間で崇仏論争が起こり、子の代になって587年に蘇我馬子が物部守屋を討滅して政治の主導権を完全に握りました。"
+            },
+            {
+                category: "8. 崇峻天皇暗殺と推古天皇の即位 (No.06)",
+                question: "物部守屋を滅ぼした蘇我馬子が擁立したものの、のちに馬子と対立して592年に暗殺された天皇と、その後に日本初の女性天皇として即位した人物の正しい組み合わせはどれか？",
+                correctAnswer: "暗殺された天皇：崇峻（すしゅん）天皇 ／ 初の女性天皇：推古（すいこ）天皇",
+                dummyAnswers: [
+                    "暗殺された天皇：用明（ようめい）天皇 ／ 初の女性天皇：皇極（こうぎょく）天皇",
+                    "暗殺された天皇：敏達（びだつ）天皇 ／ 初の女性天皇：持統（じとう）天皇",
+                    "暗殺された天皇：舒明（じょめい）天皇 ／ 初の女性天皇：元明（げんめい）天皇"
+                ],
+                explanation: "蘇我馬子は587年に崇峻天皇を擁立しましたが、天皇が馬子を嫌ったため592年に暗殺させ、敏達天皇の皇后であった推古天皇（日本初の女性天皇）を擁立しました。"
+            },
+            {
+                category: "9. 推古朝の政治体制と聖徳太子 (No.06)",
+                question: "推古天皇のもとで「摂政（せっしょう）」に就任し、大臣の蘇我馬子と協力して天皇を中心とする中央集権国家づくりを進めた皇族は誰か？",
+                correctAnswer: "厩戸王（うまやどのおう／聖徳太子）",
+                dummyAnswers: [
+                    "中大兄皇子（なかのおおえのおうじ）",
+                    "山背大兄王（やましろのおおえのおう）",
+                    "大海人皇子（おおあまのおうじ）"
+                ],
+                explanation: "用明天皇の子である厩戸王（聖徳太子）は推古天皇の摂政となり、蘇我馬子と協調しながら冠位十二階・憲法十七条の制定や遣隋使の派遣などを進めました。"
+            },
+            {
+                category: "10. 冠位十二階の制定（603年） (No.06)",
+                question: "603年に制定された「冠位十二階」の6つの徳目の正しい並び順と、この制度が目指した最も重要な目的として正しいものはどれか？",
+                correctAnswer: "徳・仁・礼・信・義・智 ―― 氏姓の世襲制を打破し、能力ある個人を登用すること",
+                dummyAnswers: [
+                    "仁・義・礼・智・信・徳 ―― 地方の国造を廃止してすべて中央から国司を派遣すること",
+                    "忠・孝・仁・義・礼・智 ―― 蘇我氏一族のみに最高位を世襲させること",
+                    "礼・智・信・義・仁・徳 ―― 班田収授法を実施するための戸籍を作成すること"
+                ],
+                explanation: "冠位十二階は「徳・仁・礼・信・義・智」のそれぞれに大小を設けた12階級で、家柄（氏姓）ではなく個人の功績や能力に応じて官人に冠を授けることで、天皇中心の官僚秩序を築こうとしました。"
+            },
+            {
+                category: "11. 憲法十七条（604年）の思想と内容 (No.06)",
+                question: "604年に制定された「憲法十七条」の特色として、次のうち誤っているものはどれか？",
+                correctAnswer: "豪族による私有地・私有民（田荘・部曲）の廃止と班田収授法の実施を規定した",
+                dummyAnswers: [
+                    "儒教・仏教・法家などの思想を取り入れた、官人（役人）に対する道徳的・政治的訓戒である",
+                    "第1条で「和を以て貴しとなし」、第2条で「篤く三宝（仏・法・僧）を敬へ」と説いている",
+                    "第3条「詔を承りては必ず謹め」や第12条「国に二の君なく、民に両の主なし」で天皇の尊厳を示した"
+                ],
+                explanation: "憲法十七条は役人（官人）への心がけや天皇への服従を示した訓戒です。私有地・私有民の廃止（公地公民）や班田収授法は、のちの大化の改新（改新の詔）で示された政策ですので誤りです。"
+            },
+            {
+                category: "12. 遣隋使の開始と600年の記録 (No.06)",
+                question: "589年に中国を統一した隋に対して600年に派遣された第1回遣隋使について、この使節の記録が載っている中国の史書と、そこに記載された倭王の呼び名の組み合わせはどれか？",
+                correctAnswer: "『隋書』倭国伝 ―― 姓は阿毎（あめ）、字は多利思比孤（たりしひこ）",
+                dummyAnswers: [
+                    "『日本書紀』 ―― 親魏倭王（しんぎわおう）",
+                    "『宋書』倭国伝 ―― 安東大将軍倭国王（あんとうだいしょうぐんわこくおう）",
+                    "『旧唐書』倭国伝 ―― 漢委奴国王（かんのわのなのこくおう）"
+                ],
+                explanation: "600年の第1回遣隋使は『日本書紀』には記載がなく、中国の『隋書』倭国伝に記されています。そこには倭王の姓は「阿毎（あめ）」、字（あざな）は「多利思比孤（たりしひこ）」、号は「阿輩雞弥（おおきみ）」と記されています。"
+            },
+            {
+                category: "13. 607年の遣隋使と対等外交 (No.06)",
+                question: "607年に遣隋使として派遣された人物と、隋の皇帝煬帝（ようだい）を激怒させた国書に記された対等外交を示す書き出しの文言の組み合わせはどれか？",
+                correctAnswer: "小野妹子（おののいもこ） ―― 「日出づる処の天子、書を日没する処の天子に致す」",
+                dummyAnswers: [
+                    "犬上御田鍬（いぬがみのみたすき） ―― 「海西の菩薩天子、重ねて仏法を興すと聞く」",
+                    "阿倍仲麻呂（あべのなかまろ） ―― 「使持節都督倭・百済・新羅諸軍事安東大将軍」",
+                    "吉備真備（きびのまきび） ―― 「東は毛人を征すること五十五国、西は衆夷を服す」"
+                ],
+                explanation: "607年に大礼・小野妹子（通訳は鞍作福利）が隋へ派遣され、皇帝の煬帝に「日出づる処の天子、書を日没する処の天子に致す。恙無きや」という対等の礼を用いた国書を提出したため、煬帝は「蛮夷の書、無礼なる有らば、復た以て聞する勿れ」と不快感を示しました。"
+            },
+            {
+                category: "14. 隋の答礼使と留学生・学問僧の随行 (No.06)",
+                question: "608年に小野妹子の帰国に伴って来日した隋の答礼使は誰か？また、同年の小野妹子の再渡航に同行した留学生・学問僧（のちの大化の改新のブレーン）の組み合わせとして正しいものはどれか？",
+                correctAnswer: "答礼使：裴世清（はいせいせい） ／ 留学生・学問僧：高向玄理・旻・南淵請安",
+                dummyAnswers: [
+                    "答礼使：鑑真（がんじん） ／ 留学生・学問僧：最澄・空海・円仁",
+                    "答礼使：王仁（わに） ／ 留学生・学問僧：阿知使主・弓月君・司馬達等",
+                    "答礼使：郭務悰（かくむそう） ／ 留学生・学問僧：山上憶良・玄昉・行基"
+                ],
+                explanation: "608年に隋の煬帝は高句麗遠征を控え日本を懐柔するため、答礼使として「裴世清」を派遣しました。裴世清の帰国時に小野妹子が再び随行し、その際「高向玄理（たかむくのくろまろ）」「旻（みん）」「南淵請安（みなみぶちのしょうあん）」らが留学しました。"
+            },
+            {
+                category: "15. 最後の遣隋使と最初の遣唐使 (No.06)",
+                question: "614年に最後の遣隋使として派遣され、618年の隋滅亡・唐建国を経て、630年には最初の遣唐使としても派遣された人物は誰か？",
+                correctAnswer: "犬上御田鍬（いぬがみのみたすき）",
+                dummyAnswers: [
+                    "小野妹子（おののいもこ）",
+                    "菅原道真（すがわらのみちざね）",
+                    "多治比県守（たじひのあがたもり）"
+                ],
+                explanation: "614年の最後の遣隋使であり、630年の第1回遣唐使も務めたのは「犬上御田鍬（いぬがみのみたすき）」です。"
+            },
+            {
+                category: "16. 推古朝の歴史書編纂（620年） (No.06)",
+                question: "620年に厩戸王（聖徳太子）と大臣の蘇我馬子が共同で編纂を進めた歴史書の名称は何か？",
+                correctAnswer: "『天皇記』『国記』",
+                dummyAnswers: [
+                    "『古事記』『日本書紀』",
+                    "『続日本紀』『日本後紀』",
+                    "『帝紀』『旧辞』"
+                ],
+                explanation: "620年に厩戸王と蘇我馬子は『天皇記』『国記』や臣連伴造国造百八十部並公民等の本記を編纂しました（のちの乙巳の変の際に蘇我蝦夷の邸宅で多くが焼失しましたが、『国記』は船恵尺によって救出されました）。"
+            }
+        ];
+
+        // State variables
+        let quizData = [];
+        let currentQuestionIdx = 0;
+        let score = 0;
+        let correctNum = 0;
+        let combo = 0;
+        let isAnswered = false;
+
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const mnemonicsModal = document.getElementById('mnemonics-modal');
+
+        // Fisher-Yates Shuffle Utility
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Initialize and randomize quiz questions & options
+        function prepareQuizData() {
+            const shuffledQuestions = shuffleArray(rawQuizData);
+            
+            quizData = shuffledQuestions.map(q => {
+                const allOptions = [q.correctAnswer, ...q.dummyAnswers];
+                const shuffledOptions = shuffleArray(allOptions);
+                const correctIndex = shuffledOptions.indexOf(q.correctAnswer);
+
+                return {
+                    category: q.category,
+                    question: q.question,
+                    options: shuffledOptions,
+                    answer: correctIndex,
+                    explanation: q.explanation
+                };
+            });
+        }
+
+        function startQuiz() {
+            sound.init();
+            prepareQuizData();
+
+            currentQuestionIdx = 0;
+            score = 0;
+            correctNum = 0;
+            combo = 0;
+            isAnswered = false;
+
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            updateScoreDisplay();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            isAnswered = false;
+            const q = quizData[currentQuestionIdx];
+
+            // Progress bar
+            const progressPct = ((currentQuestionIdx + 1) / quizData.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPct}%`;
+            document.getElementById('question-number').textContent = `Q.${currentQuestionIdx + 1} / ${quizData.length}`;
+            document.getElementById('question-category').textContent = q.category;
+            document.getElementById('question-text').textContent = q.question;
+
+            // Reset explanation card & next button
+            document.getElementById('explanation-card').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+
+            // Render option buttons
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-3.5 md:p-4 rounded-xl border border-gray-200 bg-white hover:bg-purple-50 hover:border-purple-300 font-bold text-xs md:text-sm text-gray-700 transition-all flex items-center justify-between shadow-sm group';
+                btn.onclick = () => checkAnswer(idx);
+
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-purple-700 group-hover:text-white text-gray-500 font-bold text-xs flex items-center justify-center transition-colors shrink-0">
+                            ${idx + 1}
+                        </span>
+                        <span>${optText}</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-purple-700 transition-colors ml-2"></i>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const q = quizData[currentQuestionIdx];
+            const isCorrect = (selectedIndex === q.answer);
+            const buttons = document.getElementById('options-container').querySelectorAll('button');
+
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-purple-50', 'hover:border-purple-300');
+
+                if (idx === q.answer) {
+                    btn.classList.add('bg-green-100', 'border-green-500', 'text-green-900');
+                    const badge = btn.querySelector('span');
+                    badge.className = 'w-7 h-7 rounded-full bg-green-500 text-white font-bold text-xs flex items-center justify-center shrink-0';
+                    badge.innerHTML = '<i class="fa-solid fa-check"></i>';
+                } else if (idx === selectedIndex && !isCorrect) {
+                    btn.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-900');
+                    const badge = btn.querySelector('span');
+                    badge.className = 'w-7 h-7 rounded-full bg-rose-500 text-white font-bold text-xs flex items-center justify-center shrink-0';
+                    badge.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                }
+            });
+
+            const explanationCard = document.getElementById('explanation-card');
+            const resultIcon = document.getElementById('result-icon');
+            const resultText = document.getElementById('result-text');
+            const explanationText = document.getElementById('explanation-text');
+
+            if (isCorrect) {
+                sound.playCorrect();
+                score += 6.25; // 100 / 16 = 6.25 points per question
+                correctNum++;
+                combo++;
+
+                resultIcon.className = 'fa-solid fa-circle-check text-green-400 text-xl';
+                resultText.textContent = '正解！素晴らしい！';
+                resultText.className = 'font-extrabold text-sm md:text-base text-green-300';
+            } else {
+                sound.playWrong();
+                combo = 0;
+
+                resultIcon.className = 'fa-solid fa-circle-xmark text-rose-400 text-xl';
+                resultText.textContent = `不正解... 正解は「${q.options[q.answer]}」`;
+                resultText.className = 'font-extrabold text-sm md:text-base text-rose-300';
+            }
+
+            explanationText.textContent = q.explanation;
+            explanationCard.classList.remove('hidden');
+
+            updateScoreDisplay();
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('current-score').textContent = Math.round(score);
+            const comboBadge = document.getElementById('combo-badge');
+            if (combo > 1) {
+                document.getElementById('combo-count').textContent = combo;
+                comboBadge.classList.remove('hidden');
+            } else {
+                comboBadge.classList.add('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIdx++;
+            if (currentQuestionIdx < quizData.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            sound.playFinish();
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const finalScoreVal = Math.round(score);
+            document.getElementById('final-score').textContent = finalScoreVal;
+            document.getElementById('correct-count-text').textContent = `16問中 ${correctNum}問 正解`;
+
+            const rankEl = document.getElementById('result-rank');
+            const commentEl = document.getElementById('result-comment');
+            const badgeEl = document.getElementById('result-badge');
+
+            if (finalScoreVal === 100) {
+                rankEl.textContent = '🏆 SSSランク：飛鳥の朝廷と蘇我氏 完全マスター！';
+                badgeEl.className = 'inline-block p-4 rounded-full bg-amber-100 text-amber-500 text-4xl mb-3 shadow-inner';
+                badgeEl.innerHTML = '<i class="fa-solid fa-crown"></i>';
+                commentEl.innerHTML = 'パーフェクト達成！継体天皇の即位・磐井の乱から、蘇我氏と物部氏の抗争、推古朝の冠位十二階・憲法十七条・遣隋使・『天皇記』『国記』の編纂まで完璧にマスターしています！';
+            } else if (finalScoreVal >= 80) {
+                rankEl.textContent = '🥇 Sランク：合格点達成！';
+                badgeEl.className = 'inline-block p-4 rounded-full bg-purple-100 text-purple-700 text-4xl mb-3 shadow-inner';
+                badgeEl.innerHTML = '<i class="fa-solid fa-award"></i>';
+                commentEl.innerHTML = '素晴らしい成績です！6世紀のヤマト政権の動揺から推古朝の国制改革・遣隋使まで、飛鳥時代の流れがしっかり身についています！';
+            } else if (finalScoreVal >= 60) {
+                rankEl.textContent = '🥈 Aランク：あと一歩！';
+                badgeEl.className = 'inline-block p-4 rounded-full bg-blue-100 text-blue-500 text-4xl mb-3 shadow-inner';
+                badgeEl.innerHTML = '<i class="fa-solid fa-medal"></i>';
+                commentEl.innerHTML = '基本はバッチリです！下の「飛鳥の朝廷と蘇我氏まとめ」ボタンから、磐井の乱・蘇我氏と物部氏の人物関係・遣隋使の年号をおさらいしてみましょう！';
+            } else {
+                rankEl.textContent = '🥉 Bランク：復習しよう！';
+                badgeEl.className = 'inline-block p-4 rounded-full bg-slate-100 text-slate-500 text-4xl mb-3 shadow-inner';
+                badgeEl.innerHTML = '<i class="fa-solid fa-book-open"></i>';
+                commentEl.innerHTML = 'プリントNo.06をもう一度チェック！「磐井の乱（527）」「蘇我馬子と物部守屋（587）」「冠位十二階（603）」「憲法十七条（604）」「小野妹子の遣隋使（607）」を押さえて再挑戦しよう！';
+            }
+        }
+
+        function toggleMnemonicsModal() {
+            mnemonicsModal.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
